@@ -15,17 +15,18 @@ type ProductInterface interface {
 	IsValid() (bool, error)
 	Enable() error
 	Disable() error
-	GetId() string
+	GetID() string
 	GetName() string
 	GetStatus() string
 	GetPrice() float64
+	ChangePrice(price float64) error
 }
 
 type ProductServiceInterface interface {
 	Get(id string) (ProductInterface, error)
 	Create(name string, price float64) (ProductInterface, error)
-	Enable(product ProductInterface) (bool, error)
-	Disable(product ProductInterface) (bool, error)
+	Enable(product ProductInterface) (ProductInterface, error)
+	Disable(product ProductInterface) (ProductInterface, error)
 }
 
 type ProductReader interface {
@@ -49,8 +50,8 @@ const (
 type Product struct {
 	ID     string  `valid:"uuidv4"`
 	Name   string  `valid:"required"`
-	Status string  `valid:"required"`
 	Price  float64 `valid:"float,optional"`
+	Status string  `valid:"required"`
 }
 
 func NewProduct() *Product {
@@ -65,12 +66,15 @@ func (p *Product) IsValid() (bool, error) {
 	if p.Status == "" {
 		p.Status = DISABLED
 	}
+
 	if p.Status != ENABLED && p.Status != DISABLED {
 		return false, errors.New("the status must be enabled or disabled")
 	}
+
 	if p.Price < 0 {
-		return false, errors.New("the price must be greater than zero")
+		return false, errors.New("the price must be greater or equal zero")
 	}
+
 	_, err := govalidator.ValidateStruct(p)
 	if err != nil {
 		return false, err
@@ -86,15 +90,27 @@ func (p *Product) Enable() error {
 	return errors.New("the price must be greater than zero to enable the product")
 }
 
+func (p *Product) ChangePrice(price float64) error {
+	if p.Price < 0 {
+		return errors.New("price only accept positive numbers")
+	}
+	p.Price = price
+	_, err := p.IsValid()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (p *Product) Disable() error {
 	if p.Price == 0 {
 		p.Status = DISABLED
 		return nil
 	}
-	return errors.New("the price must be zero to disable the product")
+	return errors.New("the price must be zero in order to have the product disabled")
 }
 
-func (p *Product) GetId() string {
+func (p *Product) GetID() string {
 	return p.ID
 }
 

@@ -34,6 +34,20 @@ func (m *MockProductInterface) EXPECT() *MockProductInterfaceMockRecorder {
 	return m.recorder
 }
 
+// ChangePrice mocks base method.
+func (m *MockProductInterface) ChangePrice(price float64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ChangePrice", price)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// ChangePrice indicates an expected call of ChangePrice.
+func (mr *MockProductInterfaceMockRecorder) ChangePrice(price interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChangePrice", reflect.TypeOf((*MockProductInterface)(nil).ChangePrice), price)
+}
+
 // Disable mocks base method.
 func (m *MockProductInterface) Disable() error {
 	m.ctrl.T.Helper()
@@ -62,18 +76,18 @@ func (mr *MockProductInterfaceMockRecorder) Enable() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Enable", reflect.TypeOf((*MockProductInterface)(nil).Enable))
 }
 
-// GetId mocks base method.
-func (m *MockProductInterface) GetId() string {
+// GetID mocks base method.
+func (m *MockProductInterface) GetID() string {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetId")
+	ret := m.ctrl.Call(m, "GetID")
 	ret0, _ := ret[0].(string)
 	return ret0
 }
 
-// GetId indicates an expected call of GetId.
-func (mr *MockProductInterfaceMockRecorder) GetId() *gomock.Call {
+// GetID indicates an expected call of GetID.
+func (mr *MockProductInterfaceMockRecorder) GetID() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetId", reflect.TypeOf((*MockProductInterface)(nil).GetId))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetID", reflect.TypeOf((*MockProductInterface)(nil).GetID))
 }
 
 // GetName mocks base method.
@@ -172,10 +186,10 @@ func (mr *MockProductServiceInterfaceMockRecorder) Create(name, price interface{
 }
 
 // Disable mocks base method.
-func (m *MockProductServiceInterface) Disable(product application.ProductInterface) (bool, error) {
+func (m *MockProductServiceInterface) Disable(product application.ProductInterface) (application.ProductInterface, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Disable", product)
-	ret0, _ := ret[0].(bool)
+	ret0, _ := ret[0].(application.ProductInterface)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -187,10 +201,10 @@ func (mr *MockProductServiceInterfaceMockRecorder) Disable(product interface{}) 
 }
 
 // Enable mocks base method.
-func (m *MockProductServiceInterface) Enable(product application.ProductInterface) (bool, error) {
+func (m *MockProductServiceInterface) Enable(product application.ProductInterface) (application.ProductInterface, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Enable", product)
-	ret0, _ := ret[0].(bool)
+	ret0, _ := ret[0].(application.ProductInterface)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

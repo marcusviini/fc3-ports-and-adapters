@@ -1,4 +1,4 @@
-package db
+package db_test
 
 import (
 	"database/sql"
@@ -11,12 +11,6 @@ import (
 )
 
 var Db *sql.DB
-
-func setUp() {
-	Db, _ = sql.Open("sqlite3", ":memory:")
-	createTable(Db)
-	createProduct(Db)
-}
 
 func createTable(db *sql.DB) {
 	table := `CREATE TABLE products (
@@ -39,6 +33,12 @@ func createProduct(db *sql.DB) {
 		log.Fatal(err.Error())
 	}
 	stmt.Exec()
+}
+
+func setUp() {
+	Db, _ = sql.Open("sqlite3", ":memory:")
+	createTable(Db)
+	createProduct(Db)
 }
 
 func TestProductDb_Get(t *testing.T) {

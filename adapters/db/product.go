@@ -31,7 +31,7 @@ func (p *ProductDb) Get(id string) (application.ProductInterface, error) {
 
 func (p *ProductDb) Save(product application.ProductInterface) (application.ProductInterface, error) {
 	var rows int
-	p.db.QueryRow("Select count(*) from products where id=?", product.GetId()).Scan(&rows)
+	p.db.QueryRow("Select count(*) from products where id=?", product.GetID()).Scan(&rows)
 	if rows == 0 {
 		_, err := p.create(product)
 		if err != nil {
@@ -52,7 +52,7 @@ func (p *ProductDb) create(product application.ProductInterface) (application.Pr
 		return nil, err
 	}
 	_, err = stmt.Exec(
-		product.GetId(),
+		product.GetID(),
 		product.GetName(),
 		product.GetPrice(),
 		product.GetStatus(),
@@ -68,8 +68,8 @@ func (p *ProductDb) create(product application.ProductInterface) (application.Pr
 }
 
 func (p *ProductDb) update(product application.ProductInterface) (application.ProductInterface, error) {
-	_, err := p.db.Exec("update products set name = ?, price=?, status=? where id = ?",
-		product.GetName(), product.GetPrice(), product.GetStatus(), product.GetId())
+	_, err := p.db.Exec("update products set name=?, price=?, status=? where id=?",
+		product.GetName(), product.GetPrice(), product.GetStatus(), product.GetID())
 	if err != nil {
 		return nil, err
 	}
